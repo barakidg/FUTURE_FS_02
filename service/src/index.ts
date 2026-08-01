@@ -60,6 +60,16 @@ app.use(
   })
 );
 
+
+app.get('/api/health', async (_req, res) => {
+  try {
+    await prisma.$queryRaw`SELECT 1`;
+    return res.status(200).json({ status: 'ok', timestamp: new Date() });
+  } catch (error) {
+    return res.status(500).json({ status: 'error', message: 'DB connection failed' });
+  }
+});
+
 app.use("/api/auth/*splat", toNodeHandler(auth));
 
 app.use(express.json({ limit: "10kb" }));

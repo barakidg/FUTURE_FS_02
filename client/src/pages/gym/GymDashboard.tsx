@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { UserPlus, ArrowRight } from "lucide-react";
-// import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { useSession } from "@/features/auth/hooks";
 import { useRightPanel } from "@/layouts/right-panel";

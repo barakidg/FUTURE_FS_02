@@ -106,9 +106,7 @@ export default function ApiKeysPage() {
             </li>
           ))}
         </ol>
-        {/* <Button variant="link" className="mt-4 px-0" nativeButton={false} render={<Link to="/help" />} > Full Documentation → </Button> */}
       </div>
-
       <CodeSnippet />
     </div>
   );

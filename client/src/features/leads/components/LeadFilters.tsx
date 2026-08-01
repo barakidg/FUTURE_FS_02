@@ -81,7 +81,6 @@ export function LeadFilters({ query, searchInput, onSearchInputChange, onChange 
           </SelectContent>
         </Select>
 
-        {/* Sort Order */}
         <Select
           value={`${query.sortBy ?? "createdAt"}:${query.sortOrder ?? "desc"}`}
           onValueChange={(v) => {
@@ -103,8 +102,7 @@ export function LeadFilters({ query, searchInput, onSearchInputChange, onChange 
           </SelectContent>
         </Select>
 
-        {/* Clear Filters Button */}
-        {hasActiveFilters && (
+=        {hasActiveFilters && (
           <Button
             variant="ghost"
             size="sm"

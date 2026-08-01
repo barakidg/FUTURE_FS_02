@@ -23,23 +23,3 @@ export function DashboardLayout() {
     </SidebarProvider>
   );
 }
-
-
-// export function DashboardLayout() {
-//   return (
-//     <SidebarProvider className="h-svh">
-//       <RightPanelProvider>
-//         <AppSidebar />
-//         <SidebarInset className="h-svh min-w-0 overflow-hidden">
-//           <SiteHeader />
-//           <div className="relative min-w-0 flex-1 overflow-hidden">
-//             <main className="h-full min-w-0 overflow-y-auto p-4 sm:p-6">
-//               <Outlet />
-//             </main>
-//             <RightPanel />
-//           </div>
-//         </SidebarInset>
-//       </RightPanelProvider>
-//     </SidebarProvider>
-//   );
-// }

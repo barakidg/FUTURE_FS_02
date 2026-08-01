@@ -1,6 +1,5 @@
 import { format } from "date-fns";
 import { Calendar, Dumbbell, Mail, Phone } from "lucide-react";
-// import { LeadQualificationBadge } from "../LeadQualificationBadge";
 import type { Lead } from "../../types";
 
 function DefinitionRow({ label, value }: { label: string; value: React.ReactNode }) {
