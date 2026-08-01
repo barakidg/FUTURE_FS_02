@@ -1,0 +1,231 @@
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+
+enum OrganizationStatus {
+  ACTIVE
+  SUSPENDED
+  ARCHIVED
+}
+
+enum LeadQualification {
+  HOT
+  WARM
+  COLD
+}
+
+enum LeadStatus{
+  NEW
+  CONTACTED
+  CONVERTED
+  LOST
+}
+
+enum TaskStatus {
+  PENDING
+  DONE
+  CANCELLED
+}
+
+enum SystemRole {
+  SUPER_ADMIN
+  SUPPORT
+}
+
+enum MemberRole {
+  ADMIN
+  SUPPORT
+}
+
+model User {
+  id            String    @id @default(uuid()) @db.Uuid
+  name          String
+  email         String    @unique
+  emailVerified Boolean
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  role          SystemRole?
+ 
+  sessions      Session[]
+  accounts      Account[]
+  members       Member[]
+
+  @@map("user")
+}
+
+model Session {
+  id        String   @id @default(uuid()) @db.Uuid
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String @db.Uuid
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id @default(uuid())@db.Uuid
+  accountId             String 
+  providerId            String
+  userId                String  @db.Uuid
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@map("account")
+}
+
+model Verification {
+  id         String    @id @default(uuid()) @db.Uuid
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime? @default(now())
+  updatedAt  DateTime? @updatedAt
+
+  @@map("verification")
+}
+
+model Organization {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String
+  slug      String  @unique
+  metadata  String?
+  createdAt DateTime @default(now())
+
+  status             OrganizationStatus  @default(ACTIVE) 
+  emailTemplate      String?
+
+  leads       Lead[]
+  members     Member[]
+  apiKeys     ApiKey[]
+
+  @@map("organization")
+}
+
+model Member {
+  id        String   @id @default(uuid()) @db.Uuid
+  role      MemberRole
+  createdAt DateTime @default(now())
+
+  organizationId String  @db.Uuid
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  userId String  @db.Uuid
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, userId])
+  @@index([userId])
+  @@map("member")
+}
+
+model ApiKey {
+  id     String  @id @default(uuid()) @db.Uuid
+  name   String?
+  start  String?
+  prefix String?
+  key    String
+
+  configId    String  @default("default")
+  referenceId String  @db.Uuid
+
+  organizationId String? @db.Uuid
+  organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  refillInterval Int?
+  refillAmount   Int?
+  lastRefillAt   DateTime?
+
+  enabled Boolean @default(true)
+
+  rateLimitEnabled    Boolean @default(true)
+  rateLimitTimeWindow Int?
+  rateLimitMax        Int?
+  requestCount        Int     @default(0)
+
+  remaining   Int?
+  lastRequest DateTime?
+  expiresAt   DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  permissions String?
+  metadata    String?
+
+  @@index([referenceId])
+  @@index([organizationId])
+  @@map("apikey")
+}
+
+model Lead {
+  id             String   @id @default(uuid()) @db.Uuid
+  organizationId String @db.Uuid
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  name  String
+  email String?
+  phone String?
+
+  interestEnc String?
+
+  budgetEnc String?
+
+  wantsTrainer Boolean @default(false)
+
+  messageEnc String?
+
+  sourceType   String  @default("web_form")
+  sourceDomain String?
+
+  status LeadStatus @default(NEW)
+
+  qualification LeadQualification?
+
+  notes Note[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([organizationId, status, createdAt])
+  @@index([organizationId, email])
+  @@map("lead")
+}
+
+model Note {
+  id             String  @id @default(uuid()) @db.Uuid
+  leadId         String  @db.Uuid
+  lead           Lead    @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  organizationId String @db.Uuid
+
+  contentEnc String
+
+  scheduledFor DateTime?
+
+  taskStatus TaskStatus?
+
+  createdAt DateTime @default(now())
+
+  @@index([organizationId])
+  @@index([organizationId, scheduledFor, taskStatus])
+  @@map("note")
+}
