@@ -43,6 +43,15 @@ app.use(pinoHttp({
   }, 
 }));
 
+app.get('/api/health', async (_req, res) => {
+  try {
+    await prisma.$queryRaw`SELECT 1`;
+    return res.status(200).json({ status: 'ok', timestamp: new Date() });
+  } catch (error) {
+    return res.status(500).json({ status: 'error', message: 'DB connection failed' });
+  }
+});
+
 app.use(
   "/api/public",
   cors({
@@ -59,16 +68,6 @@ app.use(
     credentials: true,
   })
 );
-
-
-app.get('/api/health', async (_req, res) => {
-  try {
-    await prisma.$queryRaw`SELECT 1`;
-    return res.status(200).json({ status: 'ok', timestamp: new Date() });
-  } catch (error) {
-    return res.status(500).json({ status: 'error', message: 'DB connection failed' });
-  }
-});
 
 app.use("/api/auth/*splat", toNodeHandler(auth));
 
