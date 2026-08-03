@@ -1,6 +1,7 @@
 import { format } from "date-fns";
 import { Calendar, Dumbbell, Mail, Phone } from "lucide-react";
 import type { Lead } from "../../types";
+import { getLabelColorClasses } from "../../labelColor";
 
 function DefinitionRow({ label, value }: { label: string; value: React.ReactNode }) {
   return (
@@ -8,6 +9,16 @@ function DefinitionRow({ label, value }: { label: string; value: React.ReactNode
       <dt className="text-xs font-medium text-muted-foreground">{label}</dt>
       <dd className="text-sm">{value ?? <span className="text-muted-foreground">—</span>}</dd>
     </div>
+  );
+}
+
+function LeadLabelBadge({ label }: { label: string }) {
+  return (
+    <span
+      className={`inline-flex w-fit items-center rounded-full border px-2 py-0.5 text-xs font-medium ${getLabelColorClasses(label)}`}
+    >
+      {label}
+    </span>
   );
 }
 
@@ -53,6 +64,10 @@ export function LeadDetailsSection({ lead }: { lead: Lead }) {
         <DefinitionRow label="Interest" value={lead.interest} />
         <DefinitionRow label="Budget" value={lead.budget} />
         <DefinitionRow label="Message" value={lead.message} />
+        <DefinitionRow
+            label="Label"
+            value={lead.label ? <LeadLabelBadge label={lead.label} /> : undefined}
+          />
         <DefinitionRow
           label="Trainer"
           value={

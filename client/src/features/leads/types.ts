@@ -11,6 +11,7 @@ export interface Lead {
   budget: string | null;
   message: string | null;
   wantsTrainer: boolean;
+  label: string | null;
   sourceType: string;
   sourceDomain: string | null;
   status: LeadStatus;
