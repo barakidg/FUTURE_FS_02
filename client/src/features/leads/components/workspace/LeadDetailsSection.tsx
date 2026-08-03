@@ -65,7 +65,7 @@ export function LeadDetailsSection({ lead }: { lead: Lead }) {
         <DefinitionRow label="Budget" value={lead.budget} />
         <DefinitionRow
           label="Message"
-          value={lead.message && <span className="text-slate-600 dark:text-slate-300">{lead.message}</span>}
+          value={lead.message && <span className="text-emerald-600 dark:text-emerald-400">{lead.message}</span>}
         />
         <DefinitionRow
             label="Label"
