@@ -68,19 +68,17 @@ export function LeadDetailsSection({ lead }: { lead: Lead }) {
             label="Label"
             value={lead.label ? <LeadLabelBadge label={lead.label} /> : undefined}
           />
-        <DefinitionRow
-          label="Trainer"
-          value={
-            lead.wantsTrainer ? (
+        {lead.wantsTrainer && (
+          <DefinitionRow
+            label="Trainer"
+            value={
               <span className="inline-flex items-center gap-1.5">
                 <Dumbbell className="h-3.5 w-3.5" />
                 Wants a trainer
               </span>
-            ) : (
-              "No"
-            )
-          }
-        />
+            }
+          />
+        )}
         <DefinitionRow
           label="Source"
           value={lead.sourceType === "web_form" ? "Website form" : "Manually added"}
