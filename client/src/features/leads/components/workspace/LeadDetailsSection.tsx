@@ -63,7 +63,10 @@ export function LeadDetailsSection({ lead }: { lead: Lead }) {
         />
         <DefinitionRow label="Interest" value={lead.interest} />
         <DefinitionRow label="Budget" value={lead.budget} />
-        <DefinitionRow label="Message" value={lead.message} />
+        <DefinitionRow
+          label="Message"
+          value={lead.message && <span className="text-slate-600 dark:text-slate-300">{lead.message}</span>}
+        />
         <DefinitionRow
             label="Label"
             value={lead.label ? <LeadLabelBadge label={lead.label} /> : undefined}
