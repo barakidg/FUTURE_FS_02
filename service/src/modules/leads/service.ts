@@ -18,6 +18,7 @@ function decipherLead(lead: Lead): DecipheredLead {
         budget: decryptOptional(lead.budgetEnc),
         message: decryptOptional(lead.messageEnc),
         wantsTrainer: lead.wantsTrainer,
+        label: lead.label,
         sourceType: lead.sourceType,
         sourceDomain: lead.sourceDomain,
         status: lead.status,
@@ -38,6 +39,7 @@ export async function createLead(input: LeadInput, meta: LeadMeta){
             budgetEnc: encryptOptional(input.budget),
             messageEnc: encryptOptional(input.message),
             wantsTrainer: input.wantsTrainer ?? false,
+            label: input.label ?? null,
             sourceType: meta.sourceType,
             sourceDomain: meta.sourceDomain ?? null,
         }
@@ -168,6 +170,7 @@ export async function updateLead(
       ...(input.budget !== undefined && { budgetEnc: encryptOptional(input.budget) }),
       ...(input.message !== undefined && { messageEnc: encryptOptional(input.message) }),
       ...(input.wantsTrainer !== undefined && { wantsTrainer: input.wantsTrainer }),
+      ...(input.label !== undefined && { label: input.label }),
     },
   });
 

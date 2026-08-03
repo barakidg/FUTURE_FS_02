@@ -15,6 +15,7 @@ const leadBaseSchema = z.object({
   budget: z.string().trim().max(255).optional(),
   message: z.string().trim().max(2000).optional(),
   wantsTrainer: z.boolean().optional(),
+  label: z.string().max(120).optional(),
 });
 
 export const leadInputSchema = leadBaseSchema.superRefine((value, ctx) => {
@@ -35,6 +36,7 @@ export interface DecipheredLead {
     budget: string | null;
     message: string | null;
     wantsTrainer: boolean;
+    label: string | null;
     sourceType: string;
     sourceDomain: string | null;
     status: LeadStatus;

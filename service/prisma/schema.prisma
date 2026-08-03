@@ -196,6 +196,7 @@ model Lead {
 
   sourceType   String  @default("web_form")
   sourceDomain String?
+  label String?  
 
   status LeadStatus @default(NEW)
 
