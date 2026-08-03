@@ -204,7 +204,3 @@ npm run preview
 ```
 
 ---
-
-## About
-
-Built as Task 2 of the Full Stack Web Development internship at Future Interns.
